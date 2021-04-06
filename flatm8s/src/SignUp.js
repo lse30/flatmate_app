@@ -22,8 +22,33 @@ export default function SignUp() {
 
 
     function handleSubmit(event) {
-        console.log(firstName, surname, email, password);
         event.preventDefault();
+        console.log(firstName, surname, email, password);
+
+        let myHeaders = new Headers()
+        myHeaders.append("content-Type", "application/json")
+
+        let requestOptions = {
+            method: "POST",
+            headers: myHeaders,
+            body: JSON.stringify({
+                "firstName": firstName,
+                "surname": surname,
+                "email": email,
+                "password": password
+            }),
+            redirect: 'follow'
+        };
+
+        fetch('http://localhost:4000/users/register', requestOptions)
+        .then((response) => response.json())
+            .then((json) => {
+                console.log(json.userId)
+            })
+        .catch((error) => {
+            console.log((error.status))
+        })
+
     }
 
     const classes = useStyles();
