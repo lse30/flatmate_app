@@ -6,4 +6,6 @@ module.exports = function (app) {
         .get( users.viewUsers );
     app.route('/users/register')
         .post( users.register );
+    app.route('/users/login')
+        .post( users.logIn );
 };

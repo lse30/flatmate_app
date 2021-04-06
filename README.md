@@ -18,6 +18,7 @@ From there they can:
 - Built initial frontend using react
 - Built initial backend using node/express 
 - Created simple SQL database (locally)
+- Created script to build databse
 
 ### TODO
 
@@ -26,5 +27,5 @@ From there they can:
 - build message-board, roster, payments, events, shopping
 - Style app
 - Flesh out database structure
-- create script to build/reset test database 
+- create script to reset test database 
 - Find a way of moving database out from local storage

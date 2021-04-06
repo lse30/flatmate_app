@@ -1,5 +1,10 @@
 const user = require('../models/users.model');
 
+function generateToken() {
+    let x = Math.random().toString(36).substr(2);
+    let y = Math.random().toString(36).substr(2);
+    return x + y;
+}
 
 exports.viewUsers =async function (req, res) {
     console.log( '\nRequest to get all users from the database');
@@ -45,4 +50,29 @@ exports.register = async function (req, res) {
         res.status(400)
             .send('ERROR creating user')
     }
+};
+
+
+exports.logIn = async function (req, res) {
+
+    const credentials = [req.body.email, req.body.password];
+    console.log(`Attempted logIn by ${credentials[0]}`)
+    try {
+        const correctCredentials = await user.checkCredentials(credentials);
+        if (!correctCredentials) {
+            res.status(400)
+                .send("Invalid Credentials")
+        } else {
+            const token = generateToken();
+            await user.logIn(credentials, token);
+            const id = await user.findUserIdByToken( token );
+            res.status(200)
+                .json({"userId": id[0].user_id, "token": token});
+        }
+    } catch (err) {
+        res.status(500)
+            .send("INTERNAL SERVER ERROR");
+    }
+
+
 };
