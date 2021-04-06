@@ -8,3 +8,19 @@ exports.getAllUsers = async function() {
     connection.release();
     return rows
 }
+
+exports.checkEmail = async function( email ) {
+    const conn = await db.getPool().getConnection();
+    const query = 'SELECT email FROM users WHERE email = ?';
+    const [ rows ] = await conn.query( query, [ email ] );
+    conn.release();
+    return rows;
+};
+
+exports.insert = async function( values ) {
+    const conn = await db.getPool().getConnection();
+    const query = 'INSERT INTO users (first_name, surname, email, password) VALUES ( ? )';
+    const [ result ] = await conn.query( query, [ values ]  );
+    conn.release();
+    return result;
+};
