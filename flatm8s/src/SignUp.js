@@ -48,6 +48,10 @@ class SignUp extends Component {
             .catch((error) => {
                 console.log((error.status))
             })
+
+        //login
+        //redirect
+
     }
 
     render() {
