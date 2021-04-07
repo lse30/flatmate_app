@@ -1,4 +1,4 @@
-DROP DATABASE flatM8s;
+DROP DATABASE IF EXISTS flatM8s ;
 
 /*
 run this file in mySQL Workbench to create the database with some init data to test with
