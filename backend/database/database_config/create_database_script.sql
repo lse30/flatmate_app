@@ -17,10 +17,9 @@ CREATE TABLE users (
 );
 
 INSERT INTO users (first_name, surname, email, password)
-VALUES  ('Liam', 'Seymour', 'lseymour123@gmail.com', 'admin'), 
-		('Stefan', 'Hall',  'pest@xero.co.nz', 'cockies'), 
+VALUES  ('Liam', 'Seymour', 'lseymour123@gmail.com', 'admin'),
+		('Stefan', 'Hall',  'pest@xero.co.nz', 'cockies'),
         ('Olive', 'Rees', 'bestcat@meow.com', 'chaseflies');
 
 SELECT * from users;
-
 
