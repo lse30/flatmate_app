@@ -8,4 +8,9 @@ module.exports = function (app) {
         .post( users.register );
     app.route('/users/login')
         .post( users.logIn );
+    app.route('/healthCheck')
+        .get((req, res) => {
+            console.log("I am Healthy")
+            res.sendStatus(200)
+        })
 };
