@@ -73,6 +73,25 @@ exports.logIn = async function (req, res) {
         res.status(500)
             .send("INTERNAL SERVER ERROR");
     }
+};
+
+exports.getName = async function (req, res) {
+    console.log('\nRequest to find a users name...')
+    const id = req.params.id;
+    try {
+        const result = await user.getName(id);
+        if (result.length === 0) {
+            res.status(404)
+                .send('Id not found');
+        } else {
+            console.log('Success!')
+            res.status(200)
+                .send(result[0]);
+        }
+    } catch (err) {
+        res.status(500)
+            .send(`ERROR reading user ${id}: ${err}`);
+    }
 
 
 };
