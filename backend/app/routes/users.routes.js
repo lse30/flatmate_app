@@ -1,5 +1,5 @@
 const users = require('../controllers/users.controller');
-
+const authenticate = require('../middleware/authenticate')
 
 module.exports = function (app) {
     app.route('/users')
@@ -8,4 +8,6 @@ module.exports = function (app) {
         .post( users.register );
     app.route('/users/login')
         .post( users.logIn );
+    app.route('/users/:id')
+        .get(authenticate.loginRequired, users.getName)
 };

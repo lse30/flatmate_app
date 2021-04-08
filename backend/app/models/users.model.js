@@ -53,3 +53,11 @@ exports.findUserIdByToken = async function( token ) {
     conn.release();
     return result;
 };
+
+exports.getName = async function( id ) {
+    const conn = await db.getPool().getConnection();
+    const query = 'SELECT first_name, surname FROM users WHERE user_id = ?';
+    const [ rows ] = await conn.query( query, [ id ] );
+    conn.release();
+    return rows;
+};
