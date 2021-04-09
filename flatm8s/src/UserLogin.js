@@ -14,7 +14,7 @@ const useStyles = theme => ({
 })
 
 
-class Login extends Component {
+class UserLogin extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -123,6 +123,6 @@ class Login extends Component {
     }
 }
 
-export default withRouter(withStyles(useStyles)(Login))
+export default withRouter(withStyles(useStyles)(UserLogin))
 
 
