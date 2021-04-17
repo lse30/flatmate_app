@@ -14,7 +14,7 @@ const useStyles = theme => ({
 })
 
 
-class Login extends Component {
+class UserLogin extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -47,7 +47,8 @@ class Login extends Component {
             .then((response) => response.json())
             .then((json) => {
                 let myHeaders = new Headers();
-                myHeaders.append("X-Authorization", json.token);
+                let user_token = json.token
+                myHeaders.append("X-Authorization", user_token);
 
                 let requestOptions = {
                     method: 'GET',
@@ -58,10 +59,11 @@ class Login extends Component {
                     .then((response) => response.json())
                     .then((json) => {
                         this.props.history.push({
-                            pathname: '/',
+                            pathname: '/ConnectFlat',
                             state: {
                                 firstName: json.first_name,
                                 surname: json.surname,
+                                token: user_token,
                             }
                         })
                     })
@@ -123,6 +125,6 @@ class Login extends Component {
     }
 }
 
-export default withRouter(withStyles(useStyles)(Login))
+export default withRouter(withStyles(useStyles)(UserLogin))
 
 
