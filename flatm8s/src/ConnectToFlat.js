@@ -7,6 +7,7 @@ import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import CreateFlat from "./CreateFlat";
+import { useLocation } from 'react-router-dom'
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -51,6 +52,7 @@ const useStyles = makeStyles((theme) => ({
 export default function SimpleTabs() {
     const classes = useStyles();
     const [value, setValue] = React.useState(0);
+    const location = useLocation()
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -69,7 +71,7 @@ export default function SimpleTabs() {
             </TabPanel>
 
             <TabPanel value={value} index={1}>
-                <CreateFlat />
+                <CreateFlat token={location?.state?.token? location.state.token : null} />
             </TabPanel>
         </div>
     );

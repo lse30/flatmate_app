@@ -47,7 +47,8 @@ class UserLogin extends Component {
             .then((response) => response.json())
             .then((json) => {
                 let myHeaders = new Headers();
-                myHeaders.append("X-Authorization", json.token);
+                let user_token = json.token
+                myHeaders.append("X-Authorization", user_token);
 
                 let requestOptions = {
                     method: 'GET',
@@ -58,10 +59,11 @@ class UserLogin extends Component {
                     .then((response) => response.json())
                     .then((json) => {
                         this.props.history.push({
-                            pathname: '/',
+                            pathname: '/ConnectFlat',
                             state: {
                                 firstName: json.first_name,
                                 surname: json.surname,
+                                token: user_token,
                             }
                         })
                     })

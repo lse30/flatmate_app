@@ -10,6 +10,7 @@ module.exports = function () {
     app.use(bodyParser.raw({ type: 'text/plain' }));  // for the /executeSql endpoint
     // ROUTES
     require('../app/routes/users.routes')(app);
+    require('../app/routes/flats.routes')(app);
     require('../app/routes/healthcheck.routes')(app);
     return app;
 };

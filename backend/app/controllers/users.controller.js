@@ -54,7 +54,6 @@ exports.register = async function (req, res) {
 
 
 exports.logIn = async function (req, res) {
-
     const credentials = [req.body.email, req.body.password];
     console.log(`Attempted logIn by ${credentials[0]}`)
     try {

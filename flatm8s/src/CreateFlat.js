@@ -23,9 +23,11 @@ class CreateFlat extends Component {
     }
 
     handleSubmit = (event) => {
+        console.log(this.props.token)
         event.preventDefault()
         let myHeaders = new Headers()
         myHeaders.append("content-Type", "application/json")
+        myHeaders.append("X-Authorization", this.props.token)
         let requestOptions = {
             method: "POST",
             headers: myHeaders,
@@ -36,17 +38,15 @@ class CreateFlat extends Component {
             redirect: 'follow'
         };
 
-        fetch(Constants.URL + '/users/register', requestOptions)
+        fetch(Constants.URL + '/flats', requestOptions)
             .then((response) => response.json())
             .then((json) => {
-                console.log(json.userId)
+                console.log(json.flatId)
             })
             .catch((error) => {
                 console.log((error.status))
             })
 
-        //login
-        //redirect
 
     }
 
