@@ -1,10 +1,13 @@
 const user = require('../models/users.model');
+let passwordHash = require('password-hash')
+
 
 function generateToken() {
     let x = Math.random().toString(36).substr(2);
     let y = Math.random().toString(36).substr(2);
     return x + y;
 }
+
 
 exports.viewUsers =async function (req, res) {
     console.log( '\nRequest to get all users from the database');
@@ -18,18 +21,17 @@ exports.viewUsers =async function (req, res) {
     }
 }
 
+
 exports.register = async function (req, res) {
     console.log('\nRequest to register a new user...');
     const newUser = req.body;
     try {
         const firstName = newUser.firstName;
         const surname = newUser.surname;
-        // const password = passwordHash.generate(newUser.password);
-        const password = newUser.password;
+        const password = passwordHash.generate(newUser.password);
         const email = newUser.email;
         let values = [firstName, surname, email, password];
-        // (newUser.city != null) ? values.push(newUser.city) : values.push(null);
-        // (newUser.country != null) ? values.push(newUser.country) : values.push(null);
+
 
         if (email.includes('@')) {
             const emailInUse = await user.checkEmail(email);
@@ -74,6 +76,25 @@ exports.logIn = async function (req, res) {
     }
 };
 
+
+exports.logOut = async function (req, res) {
+    console.log('\nRequest to log a user out...')
+    const token = req.header('X-Authorization');
+    try {
+        const result = await user.findUserIdByToken(token);
+
+        let userID = result[0].user_id;
+
+        await user.logOut(userID);
+        res.status(200)
+            .send("User logged out");
+    } catch (err) {
+        res.status(500)
+            .send("INTERNAL SERVER ERROR");
+    }
+};
+
+
 exports.getName = async function (req, res) {
     console.log('\nRequest to find a users name...')
     const id = req.params.id;
@@ -91,6 +112,4 @@ exports.getName = async function (req, res) {
         res.status(500)
             .send(`ERROR reading user ${id}: ${err}`);
     }
-
-
 };
