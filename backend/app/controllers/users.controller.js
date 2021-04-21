@@ -95,11 +95,11 @@ exports.logOut = async function (req, res) {
 };
 
 
-exports.getName = async function (req, res) {
-    console.log('\nRequest to find a users name...')
+exports.getUserInfo = async function (req, res) {
+    console.log('\nRequest to gather user info...')
     const id = req.params.id;
     try {
-        const result = await user.getName(id);
+        const result = await user.getUserData(id);
         if (result.length === 0) {
             res.status(404)
                 .send('Id not found');

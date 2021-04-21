@@ -11,5 +11,5 @@ module.exports = function (app) {
     app.route('/users/logout')
         .post(authenticate.loginRequired, users.logOut)
     app.route('/users/:id')
-        .get(authenticate.loginRequired, users.getName)
+        .get(authenticate.loginRequired, users.getUserInfo)
 };

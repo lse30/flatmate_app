@@ -1,8 +1,7 @@
 import React, {Component} from 'react'
 import {withStyles} from '@material-ui/core/styles'
 import {TextField, Container, Button, Typography} from '@material-ui/core'
-import * as Constants from './constants'
-import { withRouter } from 'react-router-dom'
+import * as Constants from '../constants'
 
 const useStyles = theme => ({
     root: {
@@ -14,85 +13,96 @@ const useStyles = theme => ({
 })
 
 
-class UserLogin extends Component {
+class SignUp extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            firstName: '',
+            surname: '',
             email: '',
-            password: '',
-            redirect: false,
+            password: ''
         }
     }
 
-
     handleSubmit = (event) => {
         event.preventDefault()
-
         let myHeaders = new Headers()
         myHeaders.append("content-Type", "application/json")
-
-
         let requestOptions = {
             method: "POST",
             headers: myHeaders,
             body: JSON.stringify({
+                "firstName": this.state.firstName,
+                "surname": this.state.surname,
                 "email": this.state.email,
                 "password": this.state.password
             }),
             redirect: 'follow'
         };
 
-
-        fetch(Constants.URL + '/users/login', requestOptions)
+        fetch(Constants.URL + '/users/register', requestOptions)
             .then((response) => response.json())
             .then((json) => {
-                let myHeaders = new Headers();
-                let user_token = json.token
-                myHeaders.append("X-Authorization", user_token);
-
+                console.log(json.userId)
+                let myHeaders = new Headers()
+                myHeaders.append("content-Type", "application/json")
                 let requestOptions = {
-                    method: 'GET',
+                    method: "POST",
                     headers: myHeaders,
+                    body: JSON.stringify({
+                        "email": this.state.email,
+                        "password": this.state.password
+                    }),
                     redirect: 'follow'
                 };
-                fetch("http://localhost:4000/users/" + json.userId, requestOptions)
+                fetch(Constants.URL + '/users/login', requestOptions)
                     .then((response) => response.json())
                     .then((json) => {
                         this.props.history.push({
                             pathname: '/ConnectFlat',
                             state: {
-                                firstName: json.first_name,
-                                surname: json.surname,
-                                token: user_token,
+                                firstName: this.state.firstName,
+                                surname: this.state.surname,
+                                flatID: null,
+                                token: json.token,
                             }
                         })
                     })
-                    .catch(error => console.log('error', error));
-
-
-
-
-
-
-
+                    .catch((error) => {
+                        console.log((error.status))
+                    })
             })
             .catch((error) => {
                 console.log((error.status))
             })
-
-
-
     }
 
     render() {
-        const {classes} = this.props;
+        const { classes } = this.props;
         return (
-
             <Container className={classes.root}>
                 <Typography variant='h4'>
-                    Login
+                    Create Account
                 </Typography>
                 <form onSubmit={this.handleSubmit}>
+                    <TextField
+                        required
+                        label='First Name'
+                        variant='outlined'
+                        margin='normal'
+                        name='firstName'
+                        onChange={(event) =>
+                        {this.setState({firstName: event.target.value})}}
+                    />
+                    <TextField
+                        required
+                        label='Surname'
+                        variant='outlined'
+                        margin='normal'
+                        name='surname'
+                        onChange={(event) =>
+                        {this.setState({surname: event.target.value})}}
+                    />
                     <TextField
                         required
                         fullWidth
@@ -100,9 +110,8 @@ class UserLogin extends Component {
                         variant='outlined'
                         margin='normal'
                         name='email'
-                        onChange={(event) => {
-                            this.setState({email: event.target.value})
-                        }}
+                        onChange={(event) =>
+                        {this.setState({email: event.target.value})}}
                     />
                     <TextField
                         required
@@ -112,9 +121,8 @@ class UserLogin extends Component {
                         margin='normal'
                         type='password'
                         name='password'
-                        onChange={(event) => {
-                            this.setState({password: event.target.value})
-                        }}
+                        onChange={(event) =>
+                        {this.setState({password: event.target.value})}}
                     />
                     <Button fullWidth variant='contained' color='primary' type='submit'>Submit</Button>
 
@@ -125,6 +133,6 @@ class UserLogin extends Component {
     }
 }
 
-export default withRouter(withStyles(useStyles)(UserLogin))
+export default withStyles(useStyles)(SignUp)
 
 
