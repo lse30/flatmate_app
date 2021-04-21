@@ -1,4 +1,5 @@
 const db = require('../../config/database')
+let passwordHash = require('password-hash')
 
 
 exports.getAllUsers = async function() {
@@ -9,6 +10,7 @@ exports.getAllUsers = async function() {
     return rows
 }
 
+
 exports.checkEmail = async function( email ) {
     const conn = await db.getPool().getConnection();
     const query = 'SELECT email FROM users WHERE email = ?';
@@ -16,6 +18,7 @@ exports.checkEmail = async function( email ) {
     conn.release();
     return rows;
 };
+
 
 exports.insert = async function( values ) {
     const conn = await db.getPool().getConnection();
@@ -25,6 +28,7 @@ exports.insert = async function( values ) {
     return result;
 };
 
+
 exports.checkCredentials = async function( credentials ) {
     const conn = await db.getPool().getConnection();
     const query = 'SELECT password FROM users WHERE email = ?';
@@ -33,11 +37,11 @@ exports.checkCredentials = async function( credentials ) {
     if (rows.length === 0) {
         return false;
     } else {
-        // let password = rows[0].password;
-        // return passwordHash.verify(credentials[1],password);
-        return credentials[1] === rows[0].password
+        let password = rows[0].password;
+        return passwordHash.verify(credentials[1],password);
     }
 };
+
 
 exports.logIn = async function( credentials, token ) {
     const conn = await db.getPool().getConnection();
@@ -45,6 +49,16 @@ exports.logIn = async function( credentials, token ) {
     await conn.query( query, [ token, credentials[0] ]  );
     conn.release();
 };
+
+
+exports.logOut = async function( userID ) {
+    const conn = await db.getPool().getConnection();
+    const query = 'UPDATE users SET auth_token = ? WHERE user_id = ?';
+    const [ result ] = await conn.query( query, [ null, userID]  );
+    conn.release();
+    return result;
+};
+
 
 exports.findUserIdByToken = async function( token ) {
     const conn = await db.getPool().getConnection();
@@ -54,9 +68,10 @@ exports.findUserIdByToken = async function( token ) {
     return result;
 };
 
-exports.getName = async function( id ) {
+
+exports.getUserData = async function( id ) {
     const conn = await db.getPool().getConnection();
-    const query = 'SELECT first_name, surname FROM users WHERE user_id = ?';
+    const query = 'SELECT first_name, surname, flat_id FROM users WHERE user_id = ?';
     const [ rows ] = await conn.query( query, [ id ] );
     conn.release();
     return rows;

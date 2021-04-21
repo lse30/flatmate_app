@@ -8,6 +8,8 @@ module.exports = function (app) {
         .post( users.register );
     app.route('/users/login')
         .post( users.logIn );
+    app.route('/users/logout')
+        .post(authenticate.loginRequired, users.logOut)
     app.route('/users/:id')
-        .get(authenticate.loginRequired, users.getName)
+        .get(authenticate.loginRequired, users.getUserInfo)
 };

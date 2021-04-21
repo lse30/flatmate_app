@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {withStyles} from '@material-ui/core/styles'
-import {TextField, Container, Button, Typography} from '@material-ui/core'
-import * as Constants from './constants'
+import {TextField, Container, Button } from '@material-ui/core'
+import * as Constants from '../constants'
 
 const useStyles = theme => ({
     root: {
@@ -13,44 +13,40 @@ const useStyles = theme => ({
 })
 
 
-class SignUp extends Component {
+class CreateFlat extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            firstName: '',
-            surname: '',
-            email: '',
+            flatName: '',
             password: ''
         }
     }
 
     handleSubmit = (event) => {
+        console.log(this.props.token)
         event.preventDefault()
         let myHeaders = new Headers()
         myHeaders.append("content-Type", "application/json")
+        myHeaders.append("X-Authorization", this.props.token)
         let requestOptions = {
             method: "POST",
             headers: myHeaders,
             body: JSON.stringify({
-                "firstName": this.state.firstName,
-                "surname": this.state.surname,
-                "email": this.state.email,
+                "flatName": this.state.flatName,
                 "password": this.state.password
             }),
             redirect: 'follow'
         };
 
-        fetch(Constants.URL + '/users/register', requestOptions)
+        fetch(Constants.URL + '/flats', requestOptions)
             .then((response) => response.json())
             .then((json) => {
-                console.log(json.userId)
+                console.log(json.flatId)
             })
             .catch((error) => {
                 console.log((error.status))
             })
 
-        //login
-        //redirect
 
     }
 
@@ -58,42 +54,21 @@ class SignUp extends Component {
         const { classes } = this.props;
         return (
             <Container className={classes.root}>
-                <Typography variant='h4'>
-                    Create Account
-                </Typography>
                 <form onSubmit={this.handleSubmit}>
                     <TextField
+                        fullWidth
                         required
-                        label='First Name'
+                        label='Flat Name'
                         variant='outlined'
                         margin='normal'
-                        name='firstName'
+                        name='flatName'
                         onChange={(event) =>
-                        {this.setState({firstName: event.target.value})}}
-                    />
-                    <TextField
-                        required
-                        label='Surname'
-                        variant='outlined'
-                        margin='normal'
-                        name='surname'
-                        onChange={(event) =>
-                        {this.setState({surname: event.target.value})}}
+                        {this.setState({flatName: event.target.value})}}
                     />
                     <TextField
                         required
                         fullWidth
-                        label='Enter your Email'
-                        variant='outlined'
-                        margin='normal'
-                        name='email'
-                        onChange={(event) =>
-                        {this.setState({email: event.target.value})}}
-                    />
-                    <TextField
-                        required
-                        fullWidth
-                        label='Password'
+                        label='Flat Password'
                         variant='outlined'
                         margin='normal'
                         type='password'
@@ -110,6 +85,6 @@ class SignUp extends Component {
     }
 }
 
-export default withStyles(useStyles)(SignUp)
+export default withStyles(useStyles)(CreateFlat)
 
 
